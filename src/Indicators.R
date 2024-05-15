@@ -27,15 +27,14 @@ summary(indval)
 #################
 # Harriman data
 harriman <- read.csv("data/Harriman_species.csv", row.names=1)
+har.env <- read.csv("data/Harriman_env.csv", row.names=1)
 
 # replace NAs with 0s
 harriman[is.na(harriman)] <- 0
 # transpose next so that species are in columns
 harriman <- t(harriman)
 
-# could try grouping into natural vs. artificial lakes
-
-# or nonhierarchical clustering
+# grouping of sites by nonhierarchical clustering (not predetermined groups)
 harkm = kmeans(harriman, centers=3)
 groupskm = harkm$cluster
 groupskm
@@ -44,4 +43,13 @@ groupskm
 indval = multipatt(harriman, groupskm, 
                    control = how(nperm=999)) 
 summary(indval) 
+
+# grouping of sites into natural vs. artificial lakes
+
+grouphar <- har.env$Origin
+grouphar
+
+indvalgr <- multipatt(harriman, grouphar, 
+                   control = how(nperm=999)) 
+summary(indvalgr) 
 
